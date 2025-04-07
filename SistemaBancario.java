@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-// Hierarquia de Clientes
 abstract class Cliente {
     private String nome;
     private String identificador;
@@ -54,7 +53,6 @@ class PessoaJuridica extends Cliente {
     }
 }
 
-// Hierarquia de Contas
 interface ContaBancaria {
     void depositar(double valor);
     boolean sacar(double valor);
@@ -157,7 +155,7 @@ class ContaPoupanca extends Conta {
 
     @Override
     public void aplicarRendimento() {
-        saldo += saldo * 0.005; // 0.5%
+        saldo += saldo * 0.005;
     }
 }
 
@@ -183,11 +181,10 @@ class ContaInvestimento extends Conta {
 
     @Override
     public void aplicarRendimento() {
-        saldo += saldo * 0.01; // 1%
+        saldo += saldo * 0.01;
     }
 }
 
-// Sistema Bancário
 public class SistemaBancario {
     private static List<Cliente> clientes = new ArrayList<>();
     private static List<Conta> contas = new ArrayList<>();
@@ -205,10 +202,17 @@ public class SistemaBancario {
             scanner.nextLine();
 
             switch (opcao) {
-                case 1 -> menuClientes();
-                case 2 -> menuContas();
-                case 3 -> System.exit(0);
-                default -> System.out.println("Opção inválida!");
+                case 1:
+                    menuClientes();
+                    break;
+                case 2:
+                    menuContas();
+                    break;
+                case 3:
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
             }
         }
     }
@@ -226,11 +230,19 @@ public class SistemaBancario {
             scanner.nextLine();
 
             switch (opcao) {
-                case 1 -> cadastrarCliente();
-                case 2 -> listarClientes();
-                case 3 -> removerCliente();
-                case 4 -> { return; }
-                default -> System.out.println("Opção inválida!");
+                case 1:
+                    cadastrarCliente();
+                    break;
+                case 2:
+                    listarClientes();
+                    break;
+                case 3:
+                    removerCliente();
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Opção inválida!");
             }
         }
     }
@@ -300,11 +312,19 @@ public class SistemaBancario {
             scanner.nextLine();
 
             switch (opcao) {
-                case 1 -> cadastrarConta();
-                case 2 -> listarTodasContas();
-                case 3 -> menuOperacoes();
-                case 4 -> { return; }
-                default -> System.out.println("Opção inválida!");
+                case 1:
+                    cadastrarConta();
+                    break;
+                case 2:
+                    listarTodasContas();
+                    break;
+                case 3:
+                    menuOperacoes();
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Opção inválida!");
             }
         }
     }
@@ -340,17 +360,20 @@ public class SistemaBancario {
 
         Conta conta;
         switch (tipo) {
-            case 1 -> {
+            case 1:
                 System.out.print("Limite: ");
                 double limite = scanner.nextDouble();
                 conta = new ContaCorrente(cliente, numero, limite);
-            }
-            case 2 -> conta = new ContaPoupanca(cliente, numero);
-            case 3 -> conta = new ContaInvestimento(cliente, numero);
-            default -> {
+                break;
+            case 2:
+                conta = new ContaPoupanca(cliente, numero);
+                break;
+            case 3:
+                conta = new ContaInvestimento(cliente, numero);
+                break;
+            default:
                 System.out.println("Tipo inválido!");
                 return;
-            }
         }
 
         contas.add(conta);
@@ -400,29 +423,31 @@ public class SistemaBancario {
             scanner.nextLine();
 
             switch (opcao) {
-                case 1 -> {
+                case 1:
                     System.out.print("Valor: ");
                     double valor = scanner.nextDouble();
                     conta.depositar(valor);
                     System.out.println("Depósito realizado!");
-                }
-                case 2 -> {
+                    break;
+                case 2:
                     System.out.print("Valor: ");
-                    double valor = scanner.nextDouble();
+                    valor = scanner.nextDouble();
                     if (conta.sacar(valor)) {
                         System.out.println("Saque realizado!");
                     } else {
                         System.out.println("Saldo insuficiente!");
                     }
-                }
-                case 3 -> {
+                    break;
+                case 3:
                     if (conta.permiteRendimento()) {
                         conta.aplicarRendimento();
                         System.out.println("Rendimento aplicado!");
                     }
-                }
-                case 4 -> { return; }
-                default -> System.out.println("Opção inválida!");
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Opção inválida!");
             }
         }
     }
