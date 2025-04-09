@@ -1,7 +1,4 @@
-
-
 public class ContaCorrente extends Conta {
-
     private double limite = 0;
 
     public ContaCorrente(Cliente cliente) {
@@ -13,7 +10,6 @@ public class ContaCorrente extends Conta {
         this.limite = limite;
     }
 
-    
     @Override
     public void sacar(double valor) {
         if (valor < 0) {
@@ -22,7 +18,7 @@ public class ContaCorrente extends Conta {
         if (valor <= (saldo + limite)) {
             this.saldo -= valor;
         } else {
-            throw new RuntimeException("Limite excedido");
+            throw new RuntimeException("Seu limite foi excedido!");
         }
     }
 

@@ -1,6 +1,4 @@
-
-
-public class ContaPoupanca extends Conta implements Rendimento {
+public class ContaPoupanca extends Conta implements Ganho {
 
     private double taxa = 0.005;
 

@@ -2,9 +2,7 @@
 import java.util.UUID;
 
 public abstract class Conta {
-
     private String id = UUID.randomUUID().toString();
-    
     
     protected double saldo = 0;
     protected final Cliente cliente;
@@ -37,7 +35,7 @@ public abstract class Conta {
    
     @Override
     public String toString() {
-        return "[" + this.id + "]: " + this.saldo;
+        return "[" + this.cliente + "]: " + this.saldo;
     }
 
 } 

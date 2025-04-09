@@ -1,8 +1,6 @@
+public class ContaInvestimento extends Conta implements Ganho {
 
-
-public class ContaInvestimento extends Conta implements Rendimento {
-
-    private double taxa = 0.02;
+    private double taxa = 0.0022;
 
     public ContaInvestimento(Cliente cliente) {
         super(cliente);
@@ -11,7 +9,7 @@ public class ContaInvestimento extends Conta implements Rendimento {
     @Override
     public void sacar(double valor) {
         if (valor > saldo) {
-            throw new BancoException("S01", "Saldo insuficiente");
+            throw new BancoException("S01", "Saldo insuficiente para saque.");
         }
         saldo -= valor;
     }

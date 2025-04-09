@@ -1,7 +1,4 @@
-
-
 public class BancoException extends RuntimeException {
-
     private final String code;
 
     public BancoException(String code, String msg) {
