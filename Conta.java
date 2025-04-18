@@ -13,13 +13,6 @@ public abstract class Conta {
         this.agencia = agencia;
         this.numero = numero;
     }
-    public Conta(String agencia, String numero) {
-        this.agencia = agencia;
-        this.numero = numero;
-        this.saldo = 0.0;  
-        this.cliente = null; 
-    }
-
     public void depositar(double valor) {
         if (valor <= 0) {
             JanelaGrafica.mensagemErroDepositar("Valor inválido", "Valor deve ser maior que zero.");
