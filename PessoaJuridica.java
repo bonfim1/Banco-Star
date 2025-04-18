@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class PessoaJuridica extends Cliente {
     private String cnpj;
+     private List<Conta> contas = new ArrayList<>();
 
     public PessoaJuridica(String name, String cnpj) {
         super(name);
@@ -14,4 +18,11 @@ public class PessoaJuridica extends Cliente {
     public String getCnpj() {
         return cnpj;
     }
+     public List<Conta> getContas() { 
+        return contas;
+    }
+    public void adicionarConta(Conta conta) { 
+        contas.add(conta);
+    }
+
 }
