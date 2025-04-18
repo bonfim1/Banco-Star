@@ -4,6 +4,8 @@ import java.util.UUID;
 import javax.swing.JOptionPane;
 
 public class JanelaGrafica {
+    private List<PessoaFisica> clientesFisicos = new ArrayList<>();
+    private List<PessoaJuridica> clientesJuridicos = new ArrayList<>();
      public void menuPrincipal() {
         String aux = "==== Sistema do Banco Star ==== \n";
         String text = "Selecione uma opção para te direcionarmos: \n";
@@ -90,7 +92,6 @@ public class JanelaGrafica {
                 return;
             }
             PessoaFisica cliente = new PessoaFisica(id, nome, telefone, cpf);
-            List<PessoaFisica> clientesFisicos = new ArrayList<>();
             clientesFisicos.add(cliente);
     
         } else if (tipo == 1) { // Cliente Jurídico (CNPJ)
@@ -100,7 +101,6 @@ public class JanelaGrafica {
                 return;
             }
             PessoaJuridica cliente = new PessoaJuridica(id, nome, telefone, cnpj);
-            List<PessoaJuridica> clientesJuridicos = new ArrayList<>();
             clientesJuridicos.add(cliente);
         }
     
@@ -108,8 +108,36 @@ public class JanelaGrafica {
     }
 
     private void listarClientes() {
-        // Listar clientes (não implementado aqui)
-        JOptionPane.showMessageDialog(null, "Listagem de clientes não implementada.");
+        StringBuilder listaClientes = new StringBuilder();
+        listaClientes.append("==== CLIENTES CADASTRADOS ====\n\n");
+        
+        listaClientes.append("--- Pessoas Físicas ---\n");
+        if (clientesFisicos.isEmpty()) {
+            listaClientes.append("Nenhum cliente físico cadastrado.\n");
+        } else {
+            for (PessoaFisica cliente : clientesFisicos) {
+                listaClientes.append("ID: ").append(cliente.getId()).append("\n");
+                listaClientes.append("Nome: ").append(cliente.getNome()).append("\n");
+                listaClientes.append("Telefone: ").append(cliente.getTelefone()).append("\n");
+                listaClientes.append("CPF: ").append(cliente.getCpf()).append("\n");
+                listaClientes.append("----------------------------\n");
+            }
+        }
+        
+        listaClientes.append("\n--- Pessoas Jurídicas ---\n");
+        if (clientesJuridicos.isEmpty()) {
+            listaClientes.append("Nenhum cliente jurídico cadastrado.\n");
+        } else {
+            for (PessoaJuridica cliente : clientesJuridicos) {
+                listaClientes.append("ID: ").append(cliente.getId()).append("\n");
+                listaClientes.append("Nome: ").append(cliente.getNome()).append("\n");
+                listaClientes.append("Telefone: ").append(cliente.getTelefone()).append("\n");
+                listaClientes.append("CNPJ: ").append(cliente.getCnpj()).append("\n");
+                listaClientes.append("----------------------------\n");
+            }
+        }
+        
+        JOptionPane.showMessageDialog(null, listaClientes.toString());
     }
 
     private void removerCliente() {
