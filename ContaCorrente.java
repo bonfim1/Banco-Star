@@ -6,9 +6,10 @@ public class ContaCorrente extends Conta {
     }
 
     public ContaCorrente(Cliente cliente, double limite) {
-        super(cliente);
+        super(cliente, agencia, numero);
         this.limite = limite;
     }
+
 
     @Override
     public void sacar(double valor) {
@@ -20,6 +21,13 @@ public class ContaCorrente extends Conta {
         } else {
             throw new RuntimeException("Seu limite foi excedido!");
         }
+    }
+
+    public double getLimite() {
+        return limite;
+    }
+    public void setLimite(double limite) {
+        this.limite = limite;
     }
 
     

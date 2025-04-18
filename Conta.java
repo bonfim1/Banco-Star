@@ -3,17 +3,21 @@ import java.util.UUID;
 
 public abstract class Conta {
     private String id = UUID.randomUUID().toString();
-    
     protected double saldo = 0;
+    protected static String agencia;
+    protected static String numero;
     protected final Cliente cliente;
 
-    public Conta(Cliente cliente) {
+    public Conta(Cliente cliente, String agencia, String numero) {
         this.cliente = cliente;
+        this.agencia = agencia;
+        this.numero = numero;
     }
 
     public void depositar(double valor) {
         if (valor <= 0) {
-            throw new BancoException("D10", "apenas depositos positivos");
+            JanelaGrafica.mensagemErroDepositar("Valor inválido", "Valor deve ser maior que zero.");
+            return;
         }
         this.saldo += valor;
     }
@@ -30,6 +34,18 @@ public abstract class Conta {
 
     public Cliente getCliente() {
         return cliente;
+    }
+
+    public String getAgencia() {
+        return agencia;
+    }
+
+    public void setAgencia(String agencia) {
+        this.agencia = agencia;
+    }
+
+    public String getNumero() {
+        return numero;
     }
 
    

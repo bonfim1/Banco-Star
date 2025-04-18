@@ -3,13 +3,14 @@ public class ContaInvestimento extends Conta implements Ganho {
     private double taxa = 0.0022;
 
     public ContaInvestimento(Cliente cliente) {
-        super(cliente);
+        super(cliente, agencia, numero);
     }
 
     @Override
     public void sacar(double valor) {
         if (valor > saldo) {
-            throw new BancoException("S01", "Saldo insuficiente para saque.");
+            JanelaGrafica.mensagemErroSacar("Saldo insuficiente", "Saldo insuficiente para realizar o saque.");
+            return;
         }
         saldo -= valor;
     }

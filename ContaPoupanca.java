@@ -3,7 +3,13 @@ public class ContaPoupanca extends Conta implements Ganho {
     private double taxa = 0.005;
 
     public ContaPoupanca(Cliente cliente) {
-        super(cliente);
+        super(cliente, agencia, numero);
+    }
+
+    public ContaPoupanca(Cliente cliente, double saldo, double taxa) {
+        super(cliente, agencia, numero);
+        this.saldo = saldo;
+        this.taxa = taxa;
     }
 
     @Override

@@ -6,17 +6,19 @@ import javax.swing.JOptionPane;
 public class JanelaGrafica {
     private List<PessoaFisica> clientesFisicos = new ArrayList<>();
     private List<PessoaJuridica> clientesJuridicos = new ArrayList<>();
-     public void menuPrincipal() {
-        String aux = "==== Sistema do Banco Star ==== \n";
+    
+    public void menuPrincipal() {
+        String aux = "✨ Banco Star ✨\n";
         String text = "Selecione uma opção para te direcionarmos: \n";
         aux += "1. Clientes\n"; 
         aux += "2. Contas\n";
-        aux += "3. Finalizar\n";
+        aux += "3. Finalizar o sistema\n";
 
         int opcao = Integer.parseInt(JOptionPane.showInputDialog(null, aux));
         if (opcao < 1 || opcao > 3) {
             JOptionPane.showMessageDialog(null, "Opção inválida");
         } else {
+            // vamos separar o menu principal em menu menores, para facilitar o entendimento do usuário
             switch (opcao) {
                 case 1:
                     menuClientes();       
@@ -34,7 +36,7 @@ public class JanelaGrafica {
 
     public void menuClientes(){
         String aux = "==== Menu Clientes ==== \n";
-        String text = "Selecione uma opção para te direcionarmos: \n";
+        String text = "Selecione uma opção: \n";
         aux += "1. Cadastrar\n"; 
         aux += "2. Listar\n";
         aux += "3. Remover\n";
@@ -72,7 +74,7 @@ public class JanelaGrafica {
             return;
         }
     
-        // Pergunta o tipo de cliente
+        // pergunta o tipo de cliente para o cadastro
         String[] opcoes = {"Físico", "Jurídico"};
         int tipo = JOptionPane.showOptionDialog(
             null, 
@@ -85,21 +87,56 @@ public class JanelaGrafica {
             opcoes[0]
         );
     
-        if (tipo == 0) { // Cliente Físico (CPF)
-            String cpf = JOptionPane.showInputDialog(null, "Digite o CPF do cliente:");
-            if (cpf == null) {
+        if (tipo == 0) { // cliente físico
+            String cpf = JOptionPane.showInputDialog(null, "Digite o CPF do cliente:").replaceAll("\\D", "");
+            
+            // típicas verificações de CPF
+            if (cpf == null || cpf.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
                 return;
+            } if (cpf.length() != 11) {
+                JOptionPane.showMessageDialog(null, "CPF inválido. O CPF deve conter 11 dígitos.");
+                return;
+            } 
+            boolean cpfExistente = false;
+            for (PessoaFisica cliente : clientesFisicos) {
+                if (cliente.getCpf().replaceAll("\\D", "").equals(cpf)) {
+                    cpfExistente = true;
+                    break;
+                }
             }
+            if (cpfExistente) {
+                JOptionPane.showMessageDialog(null, "CPF já cadastrado.");
+                return;
+            }
+            
             PessoaFisica cliente = new PessoaFisica(id, nome, telefone, cpf);
             clientesFisicos.add(cliente);
+
     
-        } else if (tipo == 1) { // Cliente Jurídico (CNPJ)
+        } else if (tipo == 1) { // cliente jurídico
             String cnpj = JOptionPane.showInputDialog(null, "Digite o CNPJ do cliente:");
-            if (cnpj == null) {
-                JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
+
+           // típicas verificações de CNPJ
+           if (cnpj == null || cnpj.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
+            return;
+        } if (cnpj.length() != 14) {
+            JOptionPane.showMessageDialog(null, "CNPJ inválido. O CNPJ deve conter 14 dígitos.");
+            return;
+        }
+    boolean cnpjExistente = false;
+            for (PessoaJuridica cliente : clientesJuridicos) {
+                if (cliente.getCnpj().replaceAll("\\D", "").equals(cnpj)) {
+                    cnpjExistente = true;
+                    break;
+                }
+            }
+            if (cnpjExistente) {
+                JOptionPane.showMessageDialog(null, "CNPJ já cadastrado.");
                 return;
             }
+
             PessoaJuridica cliente = new PessoaJuridica(id, nome, telefone, cnpj);
             clientesJuridicos.add(cliente);
         }
@@ -109,7 +146,7 @@ public class JanelaGrafica {
 
     private void listarClientes() {
         StringBuilder listaClientes = new StringBuilder();
-        listaClientes.append("==== CLIENTES CADASTRADOS ====\n\n");
+        listaClientes.append("==== Clientes já cadastrados ====\n\n");
         
         listaClientes.append("--- Pessoas Físicas ---\n");
         if (clientesFisicos.isEmpty()) {
@@ -141,20 +178,66 @@ public class JanelaGrafica {
     }
 
     private void removerCliente() {
-        String id = JOptionPane.showInputDialog(null, "Digite o ID do cliente a ser removido:");
-        
-        if (id == null) {
-            JOptionPane.showMessageDialog(null, "Remoção cancelada.");
-            return;
+        String[] opcoes = {"Físico", "Jurídico"};
+        int tipo = JOptionPane.showOptionDialog(
+            null, 
+            "Tipo de cliente:", 
+            "Remoção de clientes", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            opcoes, 
+            opcoes[0]
+        );
+    
+        if (tipo == 0) { // cliente físico
+            String cpf = JOptionPane.showInputDialog(null, "Digite o CPF do cliente que deseja remover:");
+            if (cpf == null) {
+                JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
+                return;
+            }
+            boolean removido = false;
+            for (int i = 0; i < clientesFisicos.size(); i++) {
+                if (clientesFisicos.get(i).getCpf().replaceAll("\\D", "").equals(cpf)) {
+                    clientesFisicos.remove(i);
+                    removido = true;
+                    break;
+                }
+            }
+
+            if (removido) {
+                JOptionPane.showMessageDialog(null, "Cliente físico removido com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Cliente físico não encontrado.");
+            }
+    
+        } else if (tipo == 1) {
+            String cnpj = JOptionPane.showInputDialog(null, "Digite o CNPJ do cliente que deseja removê-lo:");
+            if (cnpj == null) {
+                JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
+                return;
+            }
+            boolean removido = false;
+            for (int i = 0; i < clientesJuridicos.size(); i++) {
+                if (clientesJuridicos.get(i).getCnpj().replaceAll("\\D", "").equals(cnpj)) {
+                    clientesJuridicos.remove(i);
+                    removido = true;
+                    break;
+                }
+            }
+
+            if (removido) {
+                JOptionPane.showMessageDialog(null, "Cliente jurídico removido com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Cliente jurídico não encontrado.");
+            }
         }
-        
-        // Remover cliente da lista de clientes (não implementado aqui)
-        JOptionPane.showMessageDialog(null, "Cliente removido com sucesso: " + id);
     }
 
+    // parte para as contas
     public void menuContas(){
         String aux = "==== Menu Contas ==== \n";
-        String text = "Selecione uma opção para te direcionarmos: \n";
+        String text = "Selecione uma opção: \n";
         aux += "1. Cadastrar\n"; 
         aux += "2. Listar\n";
         aux += "3. Remover\n";
@@ -182,9 +265,22 @@ public class JanelaGrafica {
         menuContas();
     }
 
-    private void removerConta() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removerConta'");
+    private void cadastrarConta() {
+        String[] opcoes = {"Poupança", "Corrente", "Investimento"};
+        int tipo = JOptionPane.showOptionDialog(
+            null, 
+            "Tipo de contas:", 
+            "Cadastro", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            opcoes, 
+            opcoes[0]
+        );
+        String agencia = JOptionPane.showInputDialog(null, "Agência:");
+        String numero = JOptionPane.showInputDialog(null, "Número da conta:");
+
+
     }
 
     private void listarContas() {
@@ -192,9 +288,17 @@ public class JanelaGrafica {
         throw new UnsupportedOperationException("Unimplemented method 'listarContas'");
     }
 
-    private void cadastrarConta() {
+    private void removerConta() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cadastrarConta'");
+        throw new UnsupportedOperationException("Unimplemented method 'removerConta'");
+    }
+
+    public static void mensagemErroDepositar(String string, String string2) {
+        JOptionPane.showMessageDialog(null, string + string2, "Erro", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void mensagemErroSacar(String string, String string2) {
+        JOptionPane.showMessageDialog(null, string + string2, "Erro", JOptionPane.ERROR_MESSAGE);
     }
 }
 
