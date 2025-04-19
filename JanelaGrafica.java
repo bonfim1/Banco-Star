@@ -69,7 +69,7 @@ public class JanelaGrafica {
         String nome = JOptionPane.showInputDialog(null, "Nome do cliente:");
         String telefone = JOptionPane.showInputDialog(null, "Telefone do cliente:");
 
-        if (nome == null || telefone == null || nome.isBlank() || telefone.isBlank()) {
+        if (nome == null || telefone == null || nome.trim().isEmpty() || telefone.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "O seu cadastro foi cancelado ou está incompleto.");
             return;
         }
@@ -211,7 +211,7 @@ public class JanelaGrafica {
 
         if (tipo == 0) { // cliente físico
             String cpf = JOptionPane.showInputDialog(null, "Digite o CPF do cliente que deseja remover:");
-            if (cpf == null || cpf.isBlank() || cpf.replaceAll("\\D", "").length() != 11) {
+            if (cpf == null || cpf.isEmpty() || cpf.replaceAll("\\D", "").length() != 11) {
                 JOptionPane.showMessageDialog(null, "CPF inválido ou operação cancelada.");
                 return;
             }
@@ -233,7 +233,7 @@ public class JanelaGrafica {
 
         } else if (tipo == 1) {
             String cnpj = JOptionPane.showInputDialog(null, "Digite o CNPJ do cliente que deseja removê-lo:");
-            if (cnpj == null || cnpj.isBlank() || cnpj.replaceAll("\\D", "").length() != 14) {
+            if (cnpj == null || cnpj.isEmpty() || cnpj.replaceAll("\\D", "").length() != 14) {
                 JOptionPane.showMessageDialog(null, "CNPJ inválido ou operação cancelada.");
                 return;
             }
@@ -300,7 +300,7 @@ public class JanelaGrafica {
         String agencia = JOptionPane.showInputDialog(null, "Agência:");
         String numero = JOptionPane.showInputDialog(null, "Número da conta:");
 
-        if (agencia == null || agencia.isBlank() || numero == null || numero.isBlank()) {
+        if (agencia == null || agencia.isEmpty() || numero == null || numero.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Agência ou número da conta inválidos.");
             return;
         }
@@ -325,7 +325,7 @@ public class JanelaGrafica {
                 ? JOptionPane.showInputDialog(null, "Digite o CPF do cliente:")
                 : JOptionPane.showInputDialog(null, "Digite o CNPJ do cliente:");
 
-        if (documento == null || documento.isBlank()) {
+        if (documento == null || documento.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
             return;
         }
@@ -464,7 +464,7 @@ public class JanelaGrafica {
             ? JOptionPane.showInputDialog(null, "Digite o CPF do Cliente")
             : JOptionPane.showInputDialog(null, "Digite o CNPJ do Cliente");
 
-        if (documento == null || documento.isBlank()){
+        if (documento == null || documento.isEmpty()){
             JOptionPane.showMessageDialog(null, "Operação cancelada");
             return;
         }
@@ -472,7 +472,7 @@ public class JanelaGrafica {
         String agencia = JOptionPane.showInputDialog(null, "Informe a agencia da conta:");
         String numero = JOptionPane.showInputDialog(null, "Informe a numero da conta:");
         
-        if (agencia == null || agencia.isBlank() || numero == null || numero.isBlank()){
+        if (agencia == null || agencia.isEmpty() || numero == null || numero.isEmpty()){
             JOptionPane.showMessageDialog(null, "Dados da conta inválidos.");
             return;
         }

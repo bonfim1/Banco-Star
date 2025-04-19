@@ -3,7 +3,7 @@ public class ContaPoupanca extends Conta implements Ganho {
     private double taxa = 0.005;
 
     public ContaPoupanca(String agencia, String numero) {
-        super(agencia, numero);
+        super(cliente, agencia, numero);
     }
     
 

@@ -3,7 +3,7 @@ public class ContaInvestimento extends Conta implements Ganho {
     private double taxa = 0.0022;
 
     public ContaInvestimento(String agencia, String numero) {
-        super(agencia, numero);
+        super(null, agencia, numero);
     }
 
     @Override

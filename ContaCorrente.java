@@ -2,15 +2,13 @@ public class ContaCorrente extends Conta {
     private double limite = 0;
 
     public ContaCorrente(String agencia, String numero) {
-        super(agencia, numero);
+        super(null, agencia, numero);
     }
     
-
     public ContaCorrente(Cliente cliente, double limite) {
         super(cliente, agencia, numero);
         this.limite = limite;
     }
-
 
     @Override
     public void sacar(double valor) {

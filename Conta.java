@@ -6,12 +6,12 @@ public abstract class Conta {
     protected double saldo = 0;
     protected static String agencia;
     protected static String numero;
-    protected final Cliente cliente;
+    protected static Cliente cliente = null;
 
     public Conta(Cliente cliente, String agencia, String numero) {
-        this.cliente = cliente;
-        this.agencia = agencia;
-        this.numero = numero;
+        Conta.cliente = cliente;
+        Conta.agencia = agencia;
+        Conta.numero = numero;
     }
     public void depositar(double valor) {
         if (valor <= 0) {
@@ -40,7 +40,7 @@ public abstract class Conta {
     }
 
     public void setAgencia(String agencia) {
-        this.agencia = agencia;
+        Conta.agencia = agencia;
     }
 
     public String getNumero() {
@@ -50,7 +50,7 @@ public abstract class Conta {
    
     @Override
     public String toString() {
-        return "[" + this.cliente + "]: " + this.saldo;
+        return "[" + Conta.cliente + "]: " + this.saldo;
     }
 
 } 
