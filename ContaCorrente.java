@@ -1,9 +1,10 @@
 public class ContaCorrente extends Conta {
     private double limite = 0;
 
-    public ContaCorrente(Cliente cliente) {
-        this(cliente, 10);
+    public ContaCorrente(String agencia, String numero) {
+        super(agencia, numero);
     }
+    
 
     public ContaCorrente(Cliente cliente, double limite) {
         super(cliente, agencia, numero);
