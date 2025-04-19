@@ -45,8 +45,6 @@ public class JanelaGrafica {
 
             int opcao = Integer.parseInt(JOptionPane.showInputDialog(null, aux));
 
-            JOptionPane.showMessageDialog(null, "Opção inválida");
-
             switch (opcao) {
                 case 1:
                     cadastrarCliente();
