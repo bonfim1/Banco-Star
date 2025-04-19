@@ -1,5 +1,5 @@
 public class ContaCorrente extends Conta {
-    private double limite = 0;
+    private double limite = 10;
 
     public ContaCorrente(String agencia, String numero) {
         super(null, agencia, numero);

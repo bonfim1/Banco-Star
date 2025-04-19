@@ -145,56 +145,36 @@ public class JanelaGrafica {
     }
 
     private void listarClientes() {
-        Object[] opcoes = { "Pessoas Físicas(PF)", "Pessoas Jurídicas(PJ)", "PF&PJ" };
-        int escolha = JOptionPane.showOptionDialog(
-                null,
-                "Qual tipo de cliente deseja listar?",
-                "Seleção de Cliente",
-                JOptionPane.QUESTION_MESSAGE,
-                JOptionPane.DEFAULT_OPTION,
-                null,
-                opcoes,
-                opcoes[0]);
-
-        if (escolha == JOptionPane.CLOSED_OPTION) {
-            return;
-        }
-
         StringBuilder listaClientes = new StringBuilder();
-        listaClientes.append("==== Clientes já cadastrados ====\n\n");
-
+        listaClientes.append("==== CLIENTES CADASTRADOS ====\n\n");
+        
         listaClientes.append("--- Pessoas Físicas ---\n");
-        if (escolha == 0 || escolha == 2) {
-            listaClientes.append("--- Pessoas Físicas(PF) ---\n");
-            if (clientesFisicos.isEmpty()) {
-                listaClientes.append("Nenhum cliente físico cadastrado.\n");
-            } else {
-                clientesFisicos.forEach(cliente -> {
-                    listaClientes.append("ID: ").append(cliente.getId()).append("\n");
-                    listaClientes.append("Nome: ").append(cliente.getNome()).append("\n");
-                    listaClientes.append("Telefone: ").append(cliente.getTelefone()).append("\n");
-                    listaClientes.append("CPF: ").append(cliente.getCpf()).append("\n");
-                    listaClientes.append("----------------------------\n");
-                });
+        if (clientesFisicos.isEmpty()) {
+            listaClientes.append("Nenhum cliente físico cadastrado.\n");
+        } else {
+            for (PessoaFisica cliente : clientesFisicos) {
+                listaClientes.append("ID: ").append(cliente.getId()).append("\n");
+                listaClientes.append("Nome: ").append(cliente.getNome()).append("\n");
+                listaClientes.append("Telefone: ").append(cliente.getTelefone()).append("\n");
+                listaClientes.append("CPF: ").append(cliente.getCpf()).append("\n");
+                listaClientes.append("----------------------------\n");
             }
         }
-
-        if (escolha == 1 || escolha == 2) {
-            listaClientes.append("\n--- Pessoas Jurídicas ---\n");
-            if (clientesJuridicos.isEmpty()) {
-                listaClientes.append("Nenhum cliente jurídico cadastrado.\n");
-            } else {
-                clientesJuridicos.forEach(cliente -> {
-                    listaClientes.append("ID: ").append(cliente.getId()).append("\n");
-                    listaClientes.append("Nome: ").append(cliente.getNome()).append("\n");
-                    listaClientes.append("Telefone: ").append(cliente.getTelefone()).append("\n");
-                    listaClientes.append("CNPJ: ").append(cliente.getCnpj()).append("\n");
-                    listaClientes.append("----------------------------\n");
-                });
+        
+        listaClientes.append("\n--- Pessoas Jurídicas ---\n");
+        if (clientesJuridicos.isEmpty()) {
+            listaClientes.append("Nenhum cliente jurídico cadastrado.\n");
+        } else {
+            for (PessoaJuridica cliente : clientesJuridicos) {
+                listaClientes.append("ID: ").append(cliente.getId()).append("\n");
+                listaClientes.append("Nome: ").append(cliente.getNome()).append("\n");
+                listaClientes.append("Telefone: ").append(cliente.getTelefone()).append("\n");
+                listaClientes.append("CNPJ: ").append(cliente.getCnpj()).append("\n");
+                listaClientes.append("----------------------------\n");
             }
-
-            JOptionPane.showMessageDialog(null, listaClientes.toString());
         }
+        
+        JOptionPane.showMessageDialog(null, listaClientes.toString());
     }
 
     private void removerCliente() {
@@ -258,7 +238,7 @@ public class JanelaGrafica {
     public void menuContas() {
         while (true) {
             String aux = "==== Menu Contas ====\n";
-            aux += "1. Cadastrar\n2. Listar\n3. Remover\n4. Voltar";
+            aux += "1. Cadastrar\n2. Listar\n3. Remover\n4. Depositar\n5. Sacar\n6. Render\n7. Voltar";
 
             int opcao = Integer.parseInt(JOptionPane.showInputDialog(null, aux));
 
@@ -273,11 +253,254 @@ public class JanelaGrafica {
                     removerConta();
                     break;
                 case 4:
+                    depositar();
+                    break;
+                case 5:
+                    sacar();
+                    break;
+                case 6:
+                    render();
+                    break;
+                case 7:
                     return;
                 default:
                     JOptionPane.showMessageDialog(null, "[Opção Inválida] Informe uma opção válida");
             }
         }
+    }
+
+    
+
+    private void render() {
+        // fazer o método render sobre as contas poupanças e contas de investimento
+
+        Object[] opcoes = { "Poupança", "Investimento" };
+        int tipo = JOptionPane.showOptionDialog(
+                null,
+                "Tipo de contas:",
+                "Render",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]);
+        if (tipo == JOptionPane.CLOSED_OPTION) {
+            JOptionPane.showMessageDialog(null, "Operação cancelada");
+            return;
+        }
+        String agencia = JOptionPane.showInputDialog(null, "Agência:");
+        String numero = JOptionPane.showInputDialog(null, "Número da conta:");
+        if (agencia == null || agencia.isEmpty() || numero == null || numero.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Agência ou número da conta inválidos.");
+            return;
+        }
+        String documento = JOptionPane.showInputDialog(null, "Digite o CPF ou CNPJ do cliente:");
+        if (documento == null || documento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
+            return;
+        }
+        boolean encontrado = false;
+        if (tipo == 0) { // conta poupança
+            for (PessoaFisica cliente : clientesFisicos) {
+                if (cliente.getCpf().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaPoupanca && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            ((ContaPoupanca) conta).render();
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        } else { // conta investimento
+            for (PessoaJuridica cliente : clientesJuridicos) {
+                if (cliente.getCnpj().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaInvestimento && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            ((ContaInvestimento) conta).render();
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (encontrado) {
+            JOptionPane.showMessageDialog(null, "Renderização realizada com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Conta não encontrada.");
+        }
+        
+    }
+
+    private void sacar() {
+        // fazer o método sacar para todas as contas, porém respeitando as regras de negócio
+        Object[] opcoes = { "Poupança", "Corrente", "Investimento" };
+        int tipo = JOptionPane.showOptionDialog(
+                null,
+                "Tipo de contas:",
+                "Sacar",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]);
+        if (tipo == JOptionPane.CLOSED_OPTION) {
+            JOptionPane.showMessageDialog(null, "Operação cancelada");
+            return;
+        }
+        String agencia = JOptionPane.showInputDialog(null, "Agência:");
+        String numero = JOptionPane.showInputDialog(null, "Número da conta:");
+        if (agencia == null || agencia.isEmpty() || numero == null || numero.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Agência ou número da conta inválidos.");
+            return;
+        }
+        String documento = JOptionPane.showInputDialog(null, "Digite o CPF ou CNPJ do cliente:");
+        if (documento == null || documento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
+            return;
+        }
+        String valorStr = JOptionPane.showInputDialog(null, "Valor a sacar:");
+        if (valorStr == null || valorStr.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.");
+            return;
+        }
+        double valor = Double.parseDouble(valorStr);
+        boolean encontrado = false;
+        if (tipo == 0) { // conta poupança
+            for (PessoaFisica cliente : clientesFisicos) {
+                if (cliente.getCpf().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaPoupanca && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            try {
+                                ((ContaPoupanca) conta).sacar(valor);
+                                encontrado = true;
+                            } catch (RuntimeException e) {
+                                JOptionPane.showMessageDialog(null, e.getMessage());
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (tipo == 1) { // conta corrente
+            for (PessoaFisica cliente : clientesFisicos) {
+                if (cliente.getCpf().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaCorrente && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            try {
+                                ((ContaCorrente) conta).sacar(valor);
+                                encontrado = true;
+                            } catch (RuntimeException e) {
+                                JOptionPane.showMessageDialog(null, e.getMessage());
+                            }
+                        }
+                    }
+                }
+            }
+        } else { // conta investimento
+            for (PessoaJuridica cliente : clientesJuridicos) {
+                if (cliente.getCnpj().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaInvestimento && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            try {
+                                ((ContaInvestimento) conta).sacar(valor);
+                                encontrado = true;
+                            } catch (RuntimeException e) {
+                                JOptionPane.showMessageDialog(null, e.getMessage());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (encontrado) {
+            JOptionPane.showMessageDialog(null, "Saque realizado com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Conta não encontrada.");
+        }
+    }
+
+    private void depositar() {
+        Object[] opcoes = { "Poupança", "Corrente", "Investimento" };
+        int tipo = JOptionPane.showOptionDialog(
+                null,
+                "Tipo de contas:",
+                "Depositar",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]);
+        if (tipo == JOptionPane.CLOSED_OPTION) {
+            JOptionPane.showMessageDialog(null, "Operação cancelada");
+            return;
+        }
+        String agencia = JOptionPane.showInputDialog(null, "Agência:");
+        String numero = JOptionPane.showInputDialog(null, "Número da conta:");
+        if (agencia == null || agencia.isEmpty() || numero == null || numero.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Agência ou número da conta inválidos.");
+            return;
+        }
+        String documento = JOptionPane.showInputDialog(null, "Digite o CPF ou CNPJ do cliente:");
+        if (documento == null || documento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Cadastro cancelado.");
+            return;
+        }
+        String valorStr = JOptionPane.showInputDialog(null, "Valor a depositar:");
+        if (valorStr == null || valorStr.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.");
+            return;
+        }
+        double valor = Double.parseDouble(valorStr);
+        boolean encontrado = false;
+        if (tipo == 0) { // conta poupança
+            for (PessoaFisica cliente : clientesFisicos) {
+                if (cliente.getCpf().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaPoupanca && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            conta.depositar(valor);
+                            encontrado = true;
+                        }
+                    }
+                }
+            }
+        } else if (tipo == 1) { // conta corrente
+            for (PessoaFisica cliente : clientesFisicos) {
+                if (cliente.getCpf().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaCorrente && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            conta.depositar(valor);
+                            encontrado = true;
+                        }
+                    }
+                }
+            }
+        } else { // conta investimento
+            for (PessoaJuridica cliente : clientesJuridicos) {
+                if (cliente.getCnpj().replaceAll("\\D", "").equals(documento.replaceAll("\\D", ""))) {
+                    for (Conta conta : cliente.getContas()) {
+                        if (conta instanceof ContaInvestimento && conta.getAgencia().equals(agencia)
+                                && conta.getNumero().equals(numero)) {
+                            conta.depositar(valor);
+                            encontrado = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (encontrado) {
+            JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Conta não encontrada.");
+        }
+
     }
 
     private void cadastrarConta() {

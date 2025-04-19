@@ -57,9 +57,15 @@ classDiagram
     }
     class ContaPoupanca{
         +sacar(double valor)
+        +render(double valor)
+    }
+    class ContaInvestimento{
+        +sacar(double valor)
+        +render(double valor)
     }
     Conta *-- Cliente
     Conta <|-- ContaCorrente
     Conta <|-- ContaPoupanca
+    Conta <|-- ContaInvestimento
     Cliente <|-- PessoaFisica
     Cliente <|-- PessoaJuridica``
